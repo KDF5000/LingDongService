@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.moment.beans.userInfo.UserInfo" table="user_info">
+        <id name="userId" column="id" type="java.lang.Integer">   
+        <generator class="native" />  
+        </id> 
+        <property name="user_name" column="user_name" type="java.lang.String"></property>
+        <property name="phone_num" column="phone_num" type="java.lang.String"></property>
+        <property name="passwords" column="passwords" type="java.lang.String"></property>
+        <property name="sex" column="sex" type="java.lang.Integer"></property>
+        <property name="head_image" column="head_image" type="java.lang.String"></property>
+        <property name="register_time" column="register_time" type="java.lang.String"></property>
+        <property name="update_time" column="update_time" type="java.lang.String"></property>
+        <property name="last_login_time" column="last_login_time" type="java.lang.String"></property>
+        <property name="userArea" column="userArea" type="java.lang.String"></property>
+        <property name="signature" column="signature" type="java.lang.String"></property>
+        <property name="deviceId" column="deviceId" type="java.lang.String"></property>
+        <property name="packname" column="packname" type="java.lang.String"></property>
+        <property name="birthday" column="birthday" type="java.lang.String"></property>
+        <property name="age" column="age" type="java.lang.Integer"></property>
+    </class>
+</hibernate-mapping>

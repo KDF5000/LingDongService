@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:jaxrs="http://cxf.apache.org/jaxrs" 
+    xmlns:util="http://www.springframework.org/schema/util" 
+    xmlns:jaxws="http://cxf.apache.org/jaxws"
+    xsi:schemaLocation=" 
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://cxf.apache.org/jaxrs
+	http://cxf.apache.org/schemas/jaxrs.xsd
+	http://www.springframework.org/schema/util 
+	http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+		
+    <!-- Import Apache CXF Bean Definition -->
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+    <!-- <bean id="HelloWorld" class="com.moment.test.HelloWorldImpl"></bean> -->
+     
+    <!-- <jaxws:endpoint id="HelloWorld" implementor="com.moment.test.HelloWorldImpl" address="/HelloWorld" /> -->
+    
+    <!-- <jaxws:endpoint id="SignIn" implementor="com.moment.impl.userInfo.SignInImpl" address="/SignIn" /> -->
+    
+   <!--  <jaxrs:server id="HelloWorld" address="/HelloWorldServer">  
+        <jaxrs:serviceBeans>  
+            <ref bean="HelloWorldImpl"/>  
+        </jaxrs:serviceBeans>  
+        <jaxrs:extensionMappings>  
+            <entry key="feed" value="application/atom+xml"/>  
+            <entry key="json" value="application/json"/>  
+            <entry key="xml" value="application/xml"/>  
+            <entry key="html" value="text/html"/>  
+        </jaxrs:extensionMappings>  
+    </jaxrs:server>  -->   
+    
+    <bean id="inMessageInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor" />  
+    <bean id="outMessageInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>  
+      
+    <jaxrs:server id="HelloWorldI" address="/HelloWorldService">  
+        <jaxrs:inInterceptors>  
+           <ref bean="inMessageInterceptor"/>  
+        </jaxrs:inInterceptors>  
+        <jaxrs:outInterceptors>  
+            <ref bean="outMessageInterceptor"/>  
+        </jaxrs:outInterceptors>  
+        <jaxrs:serviceBeans>  
+            <ref bean="HelloWorldImpl" />  
+        </jaxrs:serviceBeans>  
+        <jaxrs:extensionMappings>  
+            <entry key="json" value="application/json" />  
+            <entry key="xml" value="application/xml" />  
+        </jaxrs:extensionMappings>  
+        <jaxrs:languageMappings>  
+            <entry key="en" value="en-gb" />  
+        </jaxrs:languageMappings>  
+    </jaxrs:server>  
+    
+    <jaxrs:server id="userInfo" address="/UserInfoService">  
+        <jaxrs:inInterceptors>  
+           <ref bean="inMessageInterceptor"/>  
+        </jaxrs:inInterceptors>  
+        <jaxrs:outInterceptors>  
+            <ref bean="outMessageInterceptor"/>  
+        </jaxrs:outInterceptors>  
+        <jaxrs:serviceBeans>  
+            <ref bean="ModifyPasswordImpl" />  
+            <ref bean="SignInImpl" />
+            <ref bean="RegistrationImpl" />
+            <ref bean="UserOwnInfoImpl" /> 
+            <ref bean="FriendRelationshipImpl" /> 
+            <ref bean="UserBehaviorImpl" />
+            <ref bean="NotificationImpl" />
+            <ref bean="SecreteMessageImpl" />    
+        </jaxrs:serviceBeans>  
+         <jaxrs:providers>
+            <bean class="com.moment.Exception.InvokeFaultExceptionMapper"/>
+        </jaxrs:providers>
+        <jaxrs:extensionMappings>  
+            <entry key="json" value="application/json" />  
+            <entry key="xml" value="application/xml" />  
+        </jaxrs:extensionMappings>  
+        <jaxrs:languageMappings>  
+            <entry key="en" value="en-gb" />  
+        </jaxrs:languageMappings>  
+    </jaxrs:server>  
+    
+    <jaxrs:server id="Moments" address="/MomentsService">   
+        <jaxrs:inInterceptors>  
+           <ref bean="inMessageInterceptor"/>  
+        </jaxrs:inInterceptors>  
+        <jaxrs:outInterceptors>  
+            <ref bean="outMessageInterceptor"/>  
+        </jaxrs:outInterceptors>  
+        <jaxrs:serviceBeans>  
+            <ref bean="AttentionImpl" />  
+            <ref bean="MomentDetailsImpl" />
+            <ref bean="MoreCommentImpl" />
+            <ref bean="ClassifyImpl" />
+            <ref bean="MomentOperateImpl" />
+            <ref bean="AddCommentImpl" /> 
+            <ref bean="AddMomentImpl" />  
+            <ref bean="MomentRecommendImpl" />          
+        </jaxrs:serviceBeans>  
+        <jaxrs:providers>
+            <bean class="com.moment.Exception.InvokeFaultExceptionMapper"/>
+        </jaxrs:providers>
+        <jaxrs:extensionMappings>  
+            <entry key="json" value="application/json" />  
+            <entry key="xml" value="application/xml" />  
+        </jaxrs:extensionMappings> 
+        <jaxrs:languageMappings>  
+            <entry key="en" value="en-gb" />  
+        </jaxrs:languageMappings>  
+    </jaxrs:server>  
+
+</beans>

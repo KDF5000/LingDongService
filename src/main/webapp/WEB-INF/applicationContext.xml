@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+             http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">           
+            
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">  
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />  
+        <property name="user" value="d8efefb3-be92" />  
+        <property name="password" value="864e953b-172f" />  
+        <property name="jdbcUrl" value="jdbc:mysql://192.168.1.13:3306/d612acf2c7ae14bf6b5744fd7cca84abd" />  
+    </bean> 
+      <!--  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">  
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />  
+        <property name="user" value="root" />  
+        <property name="password" value="root" />  
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/moment" />  
+    </bean>    --> 
+     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation">
+           <value>classpath:hibernate.cfg.xml</value>
+       </property>
+	 <!-- <property name="hibernateProperties">
+			<props>
+				<prop key="hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.temp.use_jdbc_metadata_defaults">false</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+			</props>
+		</property>	
+		<property name="mappingResources">
+			<list>
+			  <value>com/moment/beans/userInfo/UserInfo.hbm.xml</value> 
+			  <value>com/moment/beans/userInfo/UserOtherInfo.hbm.xml</value> 
+			  <value>com/moment/beans/userInfo/ThirdPartyLogging.hbm.xml</value> 
+			</list>
+		</property> -->
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<tx:advice transaction-manager="transactionManager" id="tm">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" propagation="REQUIRED"/>
+			<tx:method name="query*" read-only="true" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config proxy-target-class="true">
+		<aop:pointcut expression="execution(* com.moment.dao.*.*(..))" id="tp"/>
+		<aop:advisor advice-ref="tm" id="ta" pointcut-ref="tp"/>
+	</aop:config>
+	
+	
+	    <!-- DAO层事务定义 -->
+	  <bean id="signInDao" class="com.moment.dao.userInfo.SignInDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="registrationDao" class="com.moment.dao.userInfo.RegistrationDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="modifyPasswordDao" class="com.moment.dao.userInfo.ModifyPasswordDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="attentionDao" class="com.moment.dao.momentRecommend.AttentionDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="momentDetailsDao" class="com.moment.dao.MomentDetailsDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="moreCommentDao" class="com.moment.dao.MoreCommentDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="classifyDao" class="com.moment.dao.momentRecommend.ClassifyDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+      <bean id="userOwnInfoDao" class="com.moment.dao.userInfo.UserOwnInfoDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="momentOperateDao" class="com.moment.dao.momentRecord.MomentOperateDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="friendRelationshipDao" class="com.moment.dao.myMoment.FriendRelationshipDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="addCommentDao" class="com.moment.dao.momentRecord.AddCommentDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="userBehaviorDao" class="com.moment.dao.myMoment.UserBehaviorDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="addMomentDao" class="com.moment.dao.momentRecord.AddMomentDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     
+     <bean id="notificationDao" class="com.moment.dao.notification.NotificationDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="secreteMessageDao" class="com.moment.dao.notification.SecreteMessageDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>
+     
+     <bean id="momentRecommendDao" class="com.moment.dao.momentRecommend.MomentRecommendDao">
+     <property name="sessionFactory">
+        <ref bean="sessionFactory"/>
+     </property>
+     </bean>     
+     
+     <!-- service层事务定义 --> 
+    <bean id="signInService" class="com.moment.service.userInfo.SignInService">  
+        <property name="signInDao">
+        <ref bean="signInDao"/>
+        </property>
+    </bean>  
+    
+    <bean id="registrationService" class="com.moment.service.userInfo.RegistrationService">  
+        <property name="registrationDao">
+        <ref bean="registrationDao"/>
+        </property>
+    </bean> 
+    
+    <bean id="modifyPasswordService" class="com.moment.service.userInfo.ModifyPasswordService">  
+        <property name="modifyPasswordDao">
+        <ref bean="modifyPasswordDao"/>
+        </property>
+    </bean>
+    
+    <bean id="attentionService" class="com.moment.service.momentRecommend.AttentionService">  
+        <property name="attentionDao">
+        <ref bean="attentionDao"/>
+        </property>
+    </bean>
+    
+    <bean id="momentDetailsService" class="com.moment.service.MomentDetailsService">  
+        <property name="momentDetailsDao">
+        <ref bean="momentDetailsDao"/>
+        </property>
+    </bean>
+    
+    <bean id="moreCommentService" class="com.moment.service.MoreCommentService">  
+        <property name="moreCommentDao">
+        <ref bean="moreCommentDao"/>
+        </property>
+    </bean>
+    
+     <bean id="classifyService" class="com.moment.service.momentRecommend.ClassifyService">  
+        <property name="classifyDao">
+        <ref bean="classifyDao"/>
+        </property>
+    </bean>
+    
+    <bean id="userOwnInfoService" class="com.moment.service.userInfo.UserOwnInfoService">  
+        <property name="userOwnInfoDao">
+        <ref bean="userOwnInfoDao"/>
+        </property>
+    </bean>
+    
+     <bean id="momentOperateService" class="com.moment.service.momentRecord.MomentOperateService">  
+        <property name="momentOperateDao">
+        <ref bean="momentOperateDao"/>
+        </property>
+        <property name="notificationDao">
+        <ref bean="notificationDao"/>
+        </property>
+    </bean>
+    
+    <bean id="friendRelationshipService" class="com.moment.service.myMoment.FriendRelationshipService">  
+        <property name="friendRelationshipDao">
+        <ref bean="friendRelationshipDao"/>
+        </property>
+    </bean>
+    
+    <bean id="addCommentService" class="com.moment.service.momentRecord.AddCommentService">  
+        <property name="addCommentDao">
+        <ref bean="addCommentDao"/>
+        </property>
+        <property name="notificationDao">
+        <ref bean="notificationDao"/>
+        </property>
+    </bean>
+    
+    <bean id="userBehaviorService" class="com.moment.service.myMoment.UserBehaviorService">  
+        <property name="userBehaviorDao">
+        <ref bean="userBehaviorDao"/>
+        </property>
+    </bean>
+    
+    <bean id="addMomentService" class="com.moment.service.momentRecord.AddMomentService">  
+        <property name="addMomentDao">
+        <ref bean="addMomentDao"/>
+        </property>
+        <property name="notificationDao">
+        <ref bean="notificationDao"/>
+        </property>
+    </bean> 
+    
+    <bean id="notificationService" class="com.moment.service.notification.NotificationService">  
+        <property name="notificationDao">
+        <ref bean="notificationDao"/>
+        </property>
+    </bean>  
+    
+    <bean id="secreteMessageService" class="com.moment.service.notification.SecreteMessageService">  
+        <property name="secreteMessageDao">
+        <ref bean="secreteMessageDao"/>
+        </property>
+    </bean> 
+    
+    <bean id="momentRecommendService" class="com.moment.service.momentRecommend.MomentRecommendService">  
+        <property name="momentRecommendDao">
+        <ref bean="momentRecommendDao"/>
+        </property>
+    </bean> 
+    
+     <!-- Action层对应service层的事务定义 -->
+    <bean id="SignInImpl" class="com.moment.impl.userInfo.SignInImpl" scope="prototype">  
+       <property name="signInService">
+        <ref bean="signInService"/>
+        </property>
+    </bean> 
+    
+    <bean id="RegistrationImpl" class="com.moment.impl.userInfo.RegistrationImpl" scope="prototype">  
+       <property name="registrationService">
+        <ref bean="registrationService"/>
+        </property>
+    </bean> 
+    
+    <bean id="ModifyPasswordImpl" class="com.moment.impl.userInfo.ModifyPasswordImpl" scope="prototype">  
+       <property name="modifyPasswordService">
+        <ref bean="modifyPasswordService"/>
+        </property>
+    </bean> 
+    
+    <bean id="AttentionImpl" class="com.moment.impl.momentRecommend.AttentionImpl" scope="prototype">  
+       <property name="attentionService">
+        <ref bean="attentionService"/>
+        </property>
+    </bean>
+    
+    <bean id="MomentDetailsImpl" class="com.moment.impl.MomentDetailsImpl" scope="prototype">  
+       <property name="momentDetailsService">
+        <ref bean="momentDetailsService"/>
+        </property>
+    </bean>
+    
+    <bean id="MoreCommentImpl" class="com.moment.impl.MoreCommentImpl" scope="prototype">  
+       <property name="moreCommentService">
+        <ref bean="moreCommentService"/>
+        </property>
+    </bean>
+    
+    <bean id="ClassifyImpl" class="com.moment.impl.momentRecommend.ClassifyImpl" scope="prototype">  
+       <property name="classifyService">
+        <ref bean="classifyService"/>
+        </property>
+    </bean>
+    
+    <bean id="UserOwnInfoImpl" class="com.moment.impl.userInfo.UserOwnInfoImpl" scope="prototype">  
+       <property name="userOwnInfoService">
+        <ref bean="userOwnInfoService"/>
+        </property>
+    </bean>
+    
+    <bean id="MomentOperateImpl" class="com.moment.impl.momentRecord.MomentOperateImpl">  
+       <property name="momentOperateService">
+        <ref bean="momentOperateService"/>
+        </property>
+    </bean>
+    
+    <bean id="FriendRelationshipImpl" class="com.moment.impl.myMoment.FriendRelationshipImpl">  
+       <property name="friendRelationshipService">
+        <ref bean="friendRelationshipService"/>
+        </property>
+    </bean>
+    
+     <bean id="AddCommentImpl" class="com.moment.impl.momentRecord.AddCommentImpl">  
+       <property name="addCommentService">
+        <ref bean="addCommentService"/>
+        </property>
+    </bean>
+    
+    <bean id="UserBehaviorImpl" class="com.moment.impl.myMoment.UserBehaviorImpl">  
+       <property name="userBehaviorService">
+        <ref bean="userBehaviorService"/>
+        </property>
+    </bean>
+    
+     <bean id="AddMomentImpl" class="com.moment.impl.momentRecord.AddMomentImpl">  
+       <property name="addMomentService">
+        <ref bean="addMomentService"/>
+        </property>
+    </bean> 
+    
+    <bean id="NotificationImpl" class="com.moment.impl.notification.NotificationImpl">  
+       <property name="notificationService">
+        <ref bean="notificationService"/>
+        </property>
+    </bean> 
+    
+    <bean id="SecreteMessageImpl" class="com.moment.impl.notification.SecreteMessageImpl">  
+       <property name="secreteMessageService">
+        <ref bean="secreteMessageService"/>
+        </property>
+    </bean> 
+    
+    <bean id="MomentRecommendImpl" class="com.moment.impl.momentRecommend.MomentRecommendImpl">  
+       <property name="momentRecommendService">
+        <ref bean="momentRecommendService"/>
+        </property>
+    </bean> 
+
+    <bean id="HelloWorldImpl" class="com.moment.test.HelloWorldImpl"></bean>
+ </beans>

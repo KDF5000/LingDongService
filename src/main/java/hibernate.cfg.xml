@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE hibernate-configuration PUBLIC      
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"      
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">  
+<hibernate-configuration>  
+    <session-factory>
+     <property name="hibernate.show_sql">true</property> 
+     <property name="hbm2ddl.auto">update</property> 
+     <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property> 
+     <property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property> 
+     <property name="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</property>  
+      
+	<mapping resource="com/moment/beans/userInfo/UserInfo.hbm.xml" />
+	<mapping resource="com/moment/beans/userInfo/UserOtherInfo.hbm.xml" />
+	<mapping resource="com/moment/beans/userInfo/ThirdPartyLogging.hbm.xml" />
+	<mapping resource="com/moment/beans/momentRecommend/Moments.hbm.xml" />
+	<mapping resource="com/moment/beans/momentRecommend/Comments.hbm.xml" />
+	<mapping resource="com/moment/beans/momentRecommend/UserRelationship.hbm.xml" />
+	<mapping resource="com/moment/beans/momentRecommend/ClassifyBean.hbm.xml" />
+	<mapping resource="com/moment/beans/myMoment/Collects.hbm.xml" />
+	<mapping resource="com/moment/beans/myMoment/Praises.hbm.xml" />
+	<mapping resource="com/moment/beans/myMoment/UserBehavior.hbm.xml" />
+	<mapping resource="com/moment/beans/myMoment/CommentPraise.hbm.xml" />
+	<mapping resource="com/moment/beans/myMoment/Clippers.hbm.xml" />
+    <mapping resource="com/moment/beans/myMoment/ShareTable.hbm.xml" />
+    <mapping resource="com/moment/beans/userInfo/Notification.hbm.xml" />
+    <mapping resource="com/moment/beans/userInfo/SecretMsg.hbm.xml" />
+    <mapping resource="com/moment/beans/momentRecommend/RankList.hbm.xml" />
+    <mapping resource="com/moment/beans/momentRecommend/Recommend.hbm.xml" />
+    <mapping resource="com/moment/beans/momentRecommend/UserPreference.hbm.xml" />
+	</session-factory>
+</hibernate-configuration>  
